@@ -15,7 +15,7 @@ const config = {
     chunk_size: 60000,
     gop_cache: true,
     ping: 30,
-    ping_timeout: 60,
+    ping_timeout: 240,
   },
   http: {
     port: 8000,
@@ -54,6 +54,11 @@ console.log(`The magic happens at ${process.env.HOST}:${process.env.PORT}`);
 
 const nms = new NodeMediaServer(config);
 nms.run();
+
+nms.on("ping", (id, args) => {
+  console.log("[RTMP Server] Ping received:", id);
+  // Handle ping event here
+});
 
 nms.on("prePublish", async (id, streamPath, args) => {
   await createLiveStream({ stream_id: id, stream_path: streamPath });
